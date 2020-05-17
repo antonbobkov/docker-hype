@@ -1,4 +1,4 @@
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-deployment
@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: hello
-  replicas: 4
+  replicas: 2
   template:
     metadata:
       labels:
@@ -14,6 +14,19 @@ spec:
     spec:
       containers:
       - name: hello
-        image: antonbobkov/hello-world:v0
+        image: antonbobkov/hello-x86:latest
         ports:
         - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: hello
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 5000
+
