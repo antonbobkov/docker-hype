@@ -14,9 +14,19 @@ spec:
     spec:
       containers:
       - name: hello
-        image: antonbobkov/hello-x86:v0
+        image: antonbobkov/hello-local-fs-x86:v0
         ports:
         - containerPort: 5000
+        volumeMounts:
+        - mountPath: /test-pd
+          name: test-volume
+      volumes:
+        - name: test-volume
+          hostPath:
+            # directory location on host
+            path: /k8_shared
+            # this field is optional
+            type: Directory
 ---
 apiVersion: v1
 kind: Service
