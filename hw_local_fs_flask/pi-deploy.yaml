@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - name: hello
+        image: antonbobkov/hello-local-fs-pi:v0
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /test-pd
+          name: test-volume
+      volumes:
+        - name: test-volume
+          hostPath:
+            # directory location on host
+            path: /k8_shared
+            # this field is optional
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: hello
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 5000
+      nodePort: 30000
+

@@ -14,3 +14,7 @@ docker run --name python-app -p 5000:5000 -v /docker-dir:/test-pd my-python-app 
 IMG_NAME=antonbobkov/hello-local-fs-x86:v0
 docker tag my-python-app $IMG_NAME
 docker push $IMG_NAME
+
+sudo mkdir /k8_shared
+sudo touch /k8_shared/`hostname`
+ls /k8_shared/
