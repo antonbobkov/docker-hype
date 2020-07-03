@@ -1,0 +1,8 @@
+
+
+function lazygit() {
+	 git add . &&
+	 git commit -a -m "boop: $1" &&
+	 git push
+}
+
