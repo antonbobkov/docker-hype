@@ -29,12 +29,25 @@ conf.set('spark.ui.proxyBase', '')
 # sc = SparkContext(conf=conf)
 sc = SparkContext("local", "pi")
 
+has_seed = False
+
+def reset_seed():
+    global has_seed
+    print "Resetting seed"
+    random.seed()
+    has_seed = True
+
 def generate(itr):
+    global has_seed
+    if has_seed == False:
+        reset_seed()
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for i in range(19))
 
-print generate(1)
+print "generating", generate(1)
+print "generating", generate(2)
 
+has_seed = False
 count = sc.parallelize(xrange(NUM_LINES), int(args.num_shards)) \
           .map(generate) \
           .saveAsTextFile(args.output)
