@@ -22,12 +22,12 @@ from pyspark import SparkConf
 from pyspark import SparkContext
 
 conf = SparkConf()
-conf.setMaster('yarn-client')
-conf.setAppName('spark-yarn')
+# conf.setMaster('yarn-client')
+conf.setAppName('spark-generate')
 conf.set('spark.ui.proxyBase', '')
 
-# sc = SparkContext(conf=conf)
-sc = SparkContext("local", "pi")
+sc = SparkContext(conf=conf)
+# sc = SparkContext("local", "pi")
 
 has_seed = False
 
@@ -55,3 +55,15 @@ count = sc.parallelize(xrange(NUM_LINES), int(args.num_shards)) \
 # OUTDIR=/home/anton/spark-stuff/generate_out_test; rm -r $OUTDIR; spark-submit generate.py --output="$OUTDIR"
 # OUTDIR=/home/anton/spark-stuff/generate_out_1MB_100_shards; rm -r $OUTDIR; spark-submit generate.py --output="$OUTDIR" --size_mb=1 --num_shards=100
 # OUTDIR=/home/anton/spark-stuff/generate_out_1GB_1000_shards; rm -r $OUTDIR; spark-submit generate.py --output="$OUTDIR" --size_mb=1000 --num_shards=1000
+
+# OUTDIR=/output/generate_out_test; spark-submit generate.py --output="$OUTDIR"
+# OUTDIR=/output/generate_out_1MB_100_shards; spark-submit generate.py --output="$OUTDIR" --size_mb=1 --num_shards=100
+# OUTDIR=/output/generate_out_1GB_1000_shards; spark-submit generate.py --output="$OUTDIR" --size_mb=1000 --num_shards=1000
+
+# OUTDIR=hdfs:///output/generate_out_test; hdfs dfs -rm -r $OUTDIR; spark-submit --master=local generate.py --output=$OUTDIR
+
+# OUTDIR=hdfs:///output/generate_out_test; hdfs dfs -rm -r $OUTDIR; spark-submit --master=yarn-client generate.py --output=$OUTDIR
+# OUTDIR=hdfs:///output/generate_out_1MB_100_shards; hdfs dfs -rm -r $OUTDIR; spark-submit --master=yarn-client generate.py --output=$OUTDIR --size_mb=1 --num_shards=100
+# OUTDIR=hdfs:///output/generate_out_1GB_1000_shards; hdfs dfs -rm -r $OUTDIR; spark-submit --master=yarn-client generate.py --output=$OUTDIR --size_mb=1000 --num_shards=1000
+
+# hdfs dfs -chmod -R 777 /output
