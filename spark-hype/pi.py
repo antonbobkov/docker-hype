@@ -1,6 +1,17 @@
 import random
 
-NUM_SAMPLES = 1000000
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--parallel_samples", default=100)
+parser.add_argument("--num_tasks", default=4)
+args = parser.parse_args()
+
+print "args.parallel_samples ", args.parallel_samples
+print "args.num_tasks ", args.num_tasks
+
+# NUM_SAMPLES = 1000000
+# NUM_SAMPLES = 100
 
 from pyspark import SparkConf
 from pyspark import SparkContext
@@ -11,8 +22,8 @@ conf.setAppName('spark-yarn')
 conf.set('spark.ui.proxyBase', '')
 # conf.set('spark.ui.proxyBase', '/proxy/4040')
 
-sc = SparkContext(conf=conf)
-# sc = SparkContext("local", "pi")
+# sc = SparkContext(conf=conf)
+sc = SparkContext("local", "pi")
 
 
 def inside():
@@ -31,5 +42,5 @@ def inside_loop(itr):
 print "hi"
 print inside_loop(1)
 
-count = sc.parallelize(xrange(0, NUM_SAMPLES), 100).map(inside_loop).sum()
-print "Pi is roughly %0.15f" % (4.0 * count / NUM_SAMPLES)
+count = sc.parallelize(xrange(args.parallel_samples), args.num_tasks).map(inside_loop).sum()
+print "Pi is roughly %0.15f" % (4.0 * count / args.parallel_samples)
